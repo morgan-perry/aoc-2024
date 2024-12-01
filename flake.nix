@@ -48,18 +48,8 @@
       rec {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            mandoc
-            scdoc
             zig
             zig-shell-completions
-            glfw-wayland
-            glfw
-            glm
-            xorg.libX11
-            xorg.libXrandr
-            xorg.libXi
-            wayland
-            libxkbcommon
           ];
         };
 
