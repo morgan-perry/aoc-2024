@@ -43,8 +43,55 @@ pub fn part1(this: *const @This()) !?i64 {
 }
 
 pub fn part2(this: *const @This()) !?i64 {
-    _ = this;
-    return null;
+    // This time duplicates don't matter in the left list
+    // Hash Set of first list
+    // Iterate over each
+    //
+    // Could instead keep the appearance no. in the hashmap data
+    // Now its a O(n) algo
+
+    // Copied from part 1, not worth to create a function r.n.
+    var first_list = std.mem.zeroes([1000]i32);
+    var second_list = std.mem.zeroes([1000]i32);
+
+    var it = mem.tokenizeSequence(u8, this.input, "\n");
+
+    var idx: u16 = 0;
+    while (it.next()) |slice| {
+        var it2 = mem.tokenizeSequence(u8, slice, " "); // Why does tokenize only like one space here?
+        first_list[idx] = try std.fmt.parseInt(i32, it2.next().?, 10);
+        second_list[idx] = try std.fmt.parseInt(i32, it2.next().?, 10);
+
+        idx += 1;
+        assert(idx <= 1000);
+    }
+
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
+    var map = std.AutoArrayHashMap(i32, u16).init(
+        allocator,
+    );
+    defer map.deinit();
+
+    for (first_list) |first| {
+        try map.put(first, 0);
+    }
+    assert(map.count() <= 1000);
+    for (second_list) |second| {
+        if (map.get(second) != null) {
+            map.getPtr(second).?.* += 1;
+        }
+    }
+
+    var similarity: i32 = 0;
+    var map_iter = map.iterator();
+
+    while (map_iter.next()) |frequency| {
+        similarity += frequency.value_ptr.* * frequency.key_ptr.*;
+        assert((frequency.key_ptr.* * frequency.value_ptr.*) >= 0);
+    }
+
+    return similarity;
 }
 
 test "it should do nothing" {
