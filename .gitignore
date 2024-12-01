@@ -1,0 +1,14 @@
+### zig ###
+# Zig programming language
+
+.env
+.zig-cache/
+zig-out/
+input/
+build/
+build-*/
+docgen_tmp/
+
+# Misc
+Session.vim
+.direnv/
