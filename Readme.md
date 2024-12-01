@@ -1,3 +1,5 @@
+Advent of Code 2024 attempted with zig.
+
 Run the test with:
 
 ```sh
